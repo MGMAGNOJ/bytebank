@@ -1,26 +1,56 @@
 import 'package:flutter/material.dart';
 
 void main() => runApp(
-      Column(
-        children: const <Widget>[
-          Text('', textDirection: TextDirection.ltr),
-          Text('Deliver features faster', textDirection: TextDirection.ltr),
-          Expanded(
-            child: FittedBox(
-              fit: BoxFit.contain, // otherwise the logo will be tiny
-              child: const FlutterLogo(),
-            ),
+      MaterialApp(
+        theme: ThemeData(
+            brightness: Brightness.dark, primaryColor: Colors.blueGrey),
+        home: Scaffold(
+          appBar: AppBar(
+            title: const Text('MaterialApp Theme'),
           ),
-          Expanded(
-            child: FittedBox(
-              fit: BoxFit.contain, // otherwise the logo will be tiny
-              child: FlutterLogo(),
-            ),
+          floatingActionButton: FloatingActionButton(
+            child: Icon(Icons.add),
+            onPressed: null,
           ),
-          Text(
-            'Craft beautiful UIs',
-            textDirection: TextDirection.ltr,
-          ),
-        ],
+          body: ListaDePagamentos(),
+        ),
       ),
     );
+
+class ListaDePagamentos extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return Column(
+      children: [
+        ItemTransferencia(Transferencia(111, 1000)),
+        ItemTransferencia(Transferencia(200, 2000)),
+      ],
+    );
+  }
+}
+
+class ItemTransferencia extends StatelessWidget {
+
+  final Transferencia _transferencia;
+  ItemTransferencia(this._transferencia);
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+        child: ListTile(
+      leading: Icon(Icons.account_balance_outlined),
+      title: Text(this._transferencia.valor.toString()),
+      subtitle: Text(this._transferencia.conta.toString()),
+    ));
+  }
+}
+
+class Transferencia {
+
+  final double valor;
+  final int conta;
+
+  Transferencia(this.valor, this.conta);
+
+}
