@@ -65,8 +65,12 @@ class FormularioTransferencia extends StatelessWidget {
             style: style,
             onPressed: () {
               debugPrint("Passei");
-              debugPrint(_ControllerConta.text);
-              debugPrint(_ControllerValor.text);
+              final int? NConta = int.tryParse(_ControllerConta.text);
+              final double? NValor = double.tryParse(_ControllerValor.text);
+              if (NConta != null && NValor != null){
+                final TransfCriada = Transferencia(NValor, NConta);
+                debugPrint('$TransfCriada.toString' );
+              }
             },
             child: const Text('Efetuar Transação'),
           ),
@@ -118,4 +122,9 @@ class Transferencia {
   final int conta;
 
   Transferencia(this.valor, this.conta);
+
+  @override
+  String toString() {
+    return 'Transferencia{valor: $valor, conta: $conta}';
+  }
 }
