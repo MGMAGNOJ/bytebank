@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 void main() => runApp(ByteBankApp());
 
@@ -18,14 +19,58 @@ class ByteBankApp extends StatelessWidget {
 }
 
 class FormularioTransferencia extends StatelessWidget {
-  const FormularioTransferencia({Key? key}) : super(key: key);
+
+  final TextEditingController _ControllerConta = TextEditingController();
+  final TextEditingController _ControllerValor = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    final ButtonStyle style =
+        ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20));
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Transferencia'),
+      ),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 0.0),
+            child: TextField(
+              controller: _ControllerConta,
+              keyboardType: TextInputType.number,
+              style: TextStyle(fontSize: 24.0),
+              decoration: InputDecoration(
+                labelText: 'Conta Corrente',
+                hintText: '0000',
+              ),
 
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 0.0),
+            child: TextField(
+              controller: _ControllerValor,
+              style: TextStyle(fontSize: 24.0),
+              decoration: InputDecoration(
+                icon: Icon(Icons.monetization_on),
+                labelText: 'Valor',
+                hintText: '000.0',
+              ),
+              keyboardType: TextInputType.number,
+            ),
+          ),
+          const SizedBox(height: 30),
+          ElevatedButton(
+            style: style,
+            onPressed: () {
+              debugPrint("Passei");
+              debugPrint(_ControllerConta.text);
+              debugPrint(_ControllerValor.text);
+            },
+            child: const Text('Efetuar Transação'),
+          ),
+        ],
       ),
     );
   }
