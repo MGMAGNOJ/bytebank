@@ -70,6 +70,17 @@ class FormularioTransferencia extends StatelessWidget {
               if (NConta != null && NValor != null){
                 final TransfCriada = Transferencia(NValor, NConta);
                 debugPrint('$TransfCriada.toString' );
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: const Text('Transferencia em processamento!'),
+/*                    action: SnackBarAction(
+                      label: 'Ocultar',
+                      onPressed: () {
+                        // Code to execute.
+                      },
+                    ),*/
+                  ),
+                );
               }
             },
             child: const Text('Efetuar Transação'),
