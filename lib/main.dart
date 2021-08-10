@@ -37,32 +37,9 @@ class FormularioTransferencia extends StatelessWidget {
       ),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 0.0),
-            child: TextField(
-              controller: _controllerConta,
-              keyboardType: TextInputType.number,
-              style: TextStyle(fontSize: 24.0),
-              decoration: InputDecoration(
-                labelText: 'Conta Corrente',
-                hintText: '0000',
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 0.0),
-            child: TextField(
-              controller: _controllerValor,
-              style: TextStyle(fontSize: 24.0),
-              decoration: InputDecoration(
-                icon: Icon(Icons.monetization_on),
-                labelText: 'Valor',
-                hintText: '000.0',
-              ),
-              keyboardType: TextInputType.number,
-            ),
-          ),
-          const SizedBox(height: 30),
+          Editor(_controllerConta, "Conta", "0000",Icons.account_balance),
+          Editor(_controllerConta, "Valor", "00.00",Icons.monetization_on),
+
           ElevatedButton(
             style: style,
             onPressed: () {
@@ -88,6 +65,34 @@ class FormularioTransferencia extends StatelessWidget {
             child: const Text('Efetuar Transação'),
           ),
         ],
+      ),
+    );
+  }
+}
+
+// Classe do campo texto
+class Editor extends StatelessWidget {
+
+  final TextEditingController _controlador;
+  final IconData _icone;
+  final String _rotulo;
+  final String _dica;
+
+  const Editor(this._controlador, this._rotulo, this._dica, this._icone);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 0.0),
+      child: TextField(
+        controller: _controlador,
+        keyboardType: TextInputType.number,
+        style: TextStyle(fontSize: 24.0),
+        decoration: InputDecoration(
+          icon: Icon(_icone),
+          labelText: _rotulo,
+          hintText: _dica,
+        ),
       ),
     );
   }
