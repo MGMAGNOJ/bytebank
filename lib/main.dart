@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
+// Chamada da função principal
+// Este formato => é um formato reduzido de chamada.
 void main() => runApp(ByteBankApp());
 
+// Classe da função principal
 class ByteBankApp extends StatelessWidget {
   const ByteBankApp({Key? key}) : super(key: key);
 
@@ -18,10 +21,10 @@ class ByteBankApp extends StatelessWidget {
   }
 }
 
+// Formulario que efetua a coleta dos valores e confirma a transferencia.
 class FormularioTransferencia extends StatelessWidget {
-
-  final TextEditingController _ControllerConta = TextEditingController();
-  final TextEditingController _ControllerValor = TextEditingController();
+  final TextEditingController _controllerConta = TextEditingController();
+  final TextEditingController _controllerValor = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -37,20 +40,19 @@ class FormularioTransferencia extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 0.0),
             child: TextField(
-              controller: _ControllerConta,
+              controller: _controllerConta,
               keyboardType: TextInputType.number,
               style: TextStyle(fontSize: 24.0),
               decoration: InputDecoration(
                 labelText: 'Conta Corrente',
                 hintText: '0000',
               ),
-
             ),
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 0.0),
             child: TextField(
-              controller: _ControllerValor,
+              controller: _controllerValor,
               style: TextStyle(fontSize: 24.0),
               decoration: InputDecoration(
                 icon: Icon(Icons.monetization_on),
@@ -65,11 +67,11 @@ class FormularioTransferencia extends StatelessWidget {
             style: style,
             onPressed: () {
               debugPrint("Passei");
-              final int? NConta = int.tryParse(_ControllerConta.text);
-              final double? NValor = double.tryParse(_ControllerValor.text);
-              if (NConta != null && NValor != null){
-                final TransfCriada = Transferencia(NValor, NConta);
-                debugPrint('$TransfCriada.toString' );
+              final int? nConta = int.tryParse(_controllerConta.text);
+              final double? nValor = double.tryParse(_controllerValor.text);
+              if (nConta != null && nValor != null) {
+                final transfCriada = Transferencia(nValor, nConta);
+                debugPrint('$transfCriada.toString');
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: const Text('Transferencia em processamento!'),
@@ -91,6 +93,7 @@ class FormularioTransferencia extends StatelessWidget {
   }
 }
 
+// Classe que lista os pagamentos efetuados no app
 class ListaDePagamentos extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -112,6 +115,7 @@ class ListaDePagamentos extends StatelessWidget {
   }
 }
 
+// Representa um ítem a ser transferido.
 class ItemTransferencia extends StatelessWidget {
   final Transferencia _transferencia;
 
@@ -128,6 +132,7 @@ class ItemTransferencia extends StatelessWidget {
   }
 }
 
+// Classe que efetua o processamento e retorna uma string.
 class Transferencia {
   final double valor;
   final int conta;
