@@ -17,7 +17,7 @@ class ByteBankApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme:
-      ThemeData(brightness: Brightness.dark, primaryColor: Colors.blueGrey),
+          ThemeData(brightness: Brightness.dark, primaryColor: Colors.blueGrey),
       home: Scaffold(
         body: ListaDePagamentos(),
       ),
@@ -33,7 +33,7 @@ class FormularioTransferencia extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ButtonStyle style =
-    ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20));
+        ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20));
 
     return Scaffold(
       appBar: AppBar(
@@ -95,10 +95,11 @@ class Editor extends StatelessWidget {
   final String rotulo;
   final String dica;
 
-  const Editor({required this.controlador,
-    required this.rotulo,
-    required this.dica,
-    required this.icone});
+  const Editor(
+      {required this.controlador,
+      required this.rotulo,
+      required this.dica,
+      required this.icone});
 
   @override
   Widget build(BuildContext context) {
@@ -120,27 +121,35 @@ class Editor extends StatelessWidget {
 }
 
 // Classe que lista os pagamentos efetuados no app
-class ListaDePagamentos extends StatelessWidget {
-
+class ListaDePagamentos extends StatefulWidget {
   final List<Transferencia> _transferencias = [];
 
+  @override
+  State<StatefulWidget> createState() {
+    return ListaDePagamentosState();
+  }
+}
 
-
+class ListaDePagamentosState extends State<ListaDePagamentos> {
   @override
   Widget build(BuildContext context) {
-    _transferencias.add(Transferencia(22,23232));
+    debugPrint("Passei no inicio do Build");
+    widget._transferencias.add(Transferencia(22, 23232));
     return Scaffold(
-
       // Barra de Titulo
       appBar: AppBar(
         title: const Text('MaterialApp Theme'),
       ),
 
       // Constroi a lista dinamica de pagamentos
+
       body: ListView.builder(
-        itemCount: _transferencias.length,
+
+        itemCount: widget._transferencias.length,
         itemBuilder: (context, indice) {
-          final transferencia = _transferencias[indice];
+
+          final transferencia = widget._transferencias[indice];
+          debugPrint("Constroi a lista");
           return ItemTransferencia(transferencia);
         },
       ),
@@ -151,14 +160,15 @@ class ListaDePagamentos extends StatelessWidget {
         onPressed: () {
           // Codigo que faz a navegação para o formulario
           final Future future =
-          Navigator.push(context, MaterialPageRoute(builder: (context) {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
             return FormularioTransferencia();
           }));
           // Faz o tratamento do Retorno
           future.then((transfCriada) {
             debugPrint("Chegou no then do future");
             debugPrint('$transfCriada');
-            _transferencias.add(transfCriada);
+            widget._transferencias.add(transfCriada);
+            debugPrint("Devia ter atualizado a lista");
           });
         },
       ),
@@ -176,10 +186,10 @@ class ItemTransferencia extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
         child: ListTile(
-          leading: Icon(Icons.account_balance_outlined),
-          title: Text(this._transferencia.valor.toString()),
-          subtitle: Text(this._transferencia.conta.toString()),
-        ));
+      leading: Icon(Icons.account_balance_outlined),
+      title: Text(this._transferencia.valor.toString()),
+      subtitle: Text(this._transferencia.conta.toString()),
+    ));
   }
 }
 
