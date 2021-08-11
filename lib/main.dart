@@ -3,7 +3,11 @@ import 'package:flutter/widgets.dart';
 
 // Chamada da função principal
 // Este formato => é um formato reduzido de chamada.
-void main() => runApp(ByteBankApp());
+//void main() => runApp(ByteBankApp());
+// Formato Tradicional
+void main() {
+  runApp(ByteBankApp());
+}
 
 // Classe da função principal
 class ByteBankApp extends StatelessWidget {
@@ -15,7 +19,7 @@ class ByteBankApp extends StatelessWidget {
       theme:
           ThemeData(brightness: Brightness.dark, primaryColor: Colors.blueGrey),
       home: Scaffold(
-        body: FormularioTransferencia(),
+        body: ListaDePagamentos(),
       ),
     );
   }
@@ -37,30 +41,20 @@ class FormularioTransferencia extends StatelessWidget {
       ),
       body: Column(
         children: [
-          Editor(_controllerConta, "Conta", "0000",Icons.account_balance),
-          Editor(_controllerConta, "Valor", "00.00",Icons.monetization_on),
-
+          Editor(
+              controlador: _controllerConta,
+              rotulo: "Conta",
+              dica: "0000",
+              icone: Icons.account_balance),
+          Editor(
+              controlador: _controllerValor,
+              rotulo: "Valor",
+              dica: "00.00",
+              icone: Icons.monetization_on),
           ElevatedButton(
             style: style,
             onPressed: () {
-              debugPrint("Passei");
-              final int? nConta = int.tryParse(_controllerConta.text);
-              final double? nValor = double.tryParse(_controllerValor.text);
-              if (nConta != null && nValor != null) {
-                final transfCriada = Transferencia(nValor, nConta);
-                debugPrint('$transfCriada.toString');
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: const Text('Transferencia em processamento!'),
-/*                    action: SnackBarAction(
-                      label: 'Ocultar',
-                      onPressed: () {
-                        // Code to execute.
-                      },
-                    ),*/
-                  ),
-                );
-              }
+              _criaTransferencia(context);
             },
             child: const Text('Efetuar Transação'),
           ),
@@ -68,30 +62,58 @@ class FormularioTransferencia extends StatelessWidget {
       ),
     );
   }
+
+  // Metodo que processa os dados
+  void _criaTransferencia(BuildContext context) {
+    debugPrint("Passei");
+    final int? nConta = int.tryParse(_controllerConta.text);
+    final double? nValor = double.tryParse(_controllerValor.text);
+    if (nConta != null && nValor != null) {
+      final transfCriada = Transferencia(nValor, nConta);
+      debugPrint('Criando a Transferencia');
+      debugPrint('$transfCriada.toString');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text('Transferencia em processamento!'),
+          /*                    action: SnackBarAction(
+            label: 'Ocultar',
+            onPressed: () {
+              // Code to execute.
+            },
+          ),*/
+        ),
+      );
+      Navigator.pop(context, transfCriada);
+    }
+  }
 }
 
 // Classe do campo texto
 class Editor extends StatelessWidget {
+  final TextEditingController controlador;
+  final IconData icone;
+  final String rotulo;
+  final String dica;
 
-  final TextEditingController _controlador;
-  final IconData _icone;
-  final String _rotulo;
-  final String _dica;
-
-  const Editor(this._controlador, this._rotulo, this._dica, this._icone);
+  const Editor(
+      {required this.controlador,
+      required this.rotulo,
+      required this.dica,
+      required this.icone});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 0.0),
       child: TextField(
-        controller: _controlador,
+        controller: controlador,
         keyboardType: TextInputType.number,
         style: TextStyle(fontSize: 24.0),
         decoration: InputDecoration(
-          icon: Icon(_icone),
-          labelText: _rotulo,
-          hintText: _dica,
+          //  Testar nulo em um parametro
+          icon: icone != null ? Icon(icone) : null,
+          labelText: rotulo,
+          hintText: dica,
         ),
       ),
     );
@@ -114,7 +136,18 @@ class ListaDePagamentos extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: null,
+        onPressed: () {
+          // Codigo que faz a navegação para o formulario
+          final Future future =
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return FormularioTransferencia();
+          }));
+          // Faz o tratamento do Retorno
+          future.then((transfCriada) {
+            debugPrint("Chegou no then do future");
+            debugPrint('$transfCriada');
+          });
+        },
       ),
     );
   }
