@@ -39,26 +39,28 @@ class FormularioTransferencia extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Transferencia'),
       ),
-      body: Column(
-        children: [
-          Editor(
-              controlador: _controllerConta,
-              rotulo: "Conta",
-              dica: "0000",
-              icone: Icons.account_balance),
-          Editor(
-              controlador: _controllerValor,
-              rotulo: "Valor",
-              dica: "00.00",
-              icone: Icons.monetization_on),
-          ElevatedButton(
-            style: style,
-            onPressed: () {
-              _criaTransferencia(context);
-            },
-            child: const Text('Efetuar Transação'),
-          ),
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Editor(
+                controlador: _controllerConta,
+                rotulo: "Conta",
+                dica: "0000",
+                icone: Icons.account_balance),
+            Editor(
+                controlador: _controllerValor,
+                rotulo: "Valor",
+                dica: "00.00",
+                icone: Icons.monetization_on),
+            ElevatedButton(
+              style: style,
+              onPressed: () {
+                _criaTransferencia(context);
+              },
+              child: const Text('Efetuar Transação'),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -134,7 +136,8 @@ class ListaDePagamentosState extends State<ListaDePagamentos> {
   @override
   Widget build(BuildContext context) {
     debugPrint("Passei no inicio do Build");
-    widget._transferencias.add(Transferencia(22, 23232));
+    // Para teste da lista
+    // widget._transferencias.add(Transferencia(22, 23232));
     return Scaffold(
       // Barra de Titulo
       appBar: AppBar(
@@ -144,10 +147,8 @@ class ListaDePagamentosState extends State<ListaDePagamentos> {
       // Constroi a lista dinamica de pagamentos
 
       body: ListView.builder(
-
         itemCount: widget._transferencias.length,
         itemBuilder: (context, indice) {
-
           final transferencia = widget._transferencias[indice];
           debugPrint("Constroi a lista");
           return ItemTransferencia(transferencia);
@@ -167,7 +168,14 @@ class ListaDePagamentosState extends State<ListaDePagamentos> {
           future.then((transfCriada) {
             debugPrint("Chegou no then do future");
             debugPrint('$transfCriada');
-            widget._transferencias.add(transfCriada);
+
+            // Sempre é necessario verificar se o retorno não é nulo para o
+            // caso de retorno pelo botao voltar.
+            if (widget._transferencias != null) {
+              setState(() {
+                widget._transferencias.add(transfCriada);
+              });
+            }
             debugPrint("Devia ter atualizado a lista");
           });
         },
@@ -202,6 +210,6 @@ class Transferencia {
 
   @override
   String toString() {
-    return 'Transferencia{valor: $valor, conta: $conta}';
+    return 'Transferencia: {valor: $valor, conta: $conta}';
   }
 }
