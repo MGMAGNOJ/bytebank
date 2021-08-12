@@ -37,22 +37,21 @@ class ListaDePagamentosState extends State<ListaDePagamentos> {
           }));
           // Faz o tratamento do Retorno
           future.then((transfCriada) {
+            debugPrint("Chegou no then do future");
+            //debugPrint('$transfCriada');
+
             // Sempre é necessario verificar se o retorno não é nulo para o
             // caso de retorno pelo botao voltar.
-            _transfereValor(transfCriada);
+            if (transfCriada != null) {
+              setState(() {
+                widget._transferencias.add(transfCriada);
+                debugPrint("Atualiza a lista");
+              });
+            }
           });
         },
       ),
     );
-  }
-
-  void _transfereValor(transfCriada) {
-    if (transfCriada != null) {
-      setState(() {
-        widget._transferencias.add(transfCriada);
-        debugPrint("Atualiza a lista");
-      });
-    }
   }
 }
 

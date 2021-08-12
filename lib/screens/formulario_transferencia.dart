@@ -58,8 +58,8 @@ class FormularioTransferenciaState extends State<FormularioTransferencia> {
     final double? nValor = double.tryParse(_controllerValor.text);
     if (nConta != null && nValor != null) {
       final transfCriada = Transferencia(nValor, nConta);
-      //debugPrint('Criando a Transferencia');
-      //debugPrint('$transfCriada.toString');
+      debugPrint('Criando a Transferencia');
+      debugPrint('$transfCriada.toString');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: const Text('Transferencia em processamento!'),
